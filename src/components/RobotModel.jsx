@@ -5,7 +5,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export default function RobotModel() {
-  const { scene } = useGLTF('/utility_robot.glb'); 
+  const { scene } = useGLTF( import.meta.env.BASE_URL + 'utility_robot.glb'); 
   const ref = useRef();
 
   useFrame((state) => {
@@ -36,4 +36,5 @@ export default function RobotModel() {
       position={[0, 0, 0]} 
     />
   );
+
 }
