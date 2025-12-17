@@ -1,143 +1,203 @@
-// Services.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   Code, 
   Palette, 
   Smartphone, 
   BarChart3, 
   Zap, 
-  Shield 
+  Shield,
+  Cloud,
+  Server,
+  Database,
+  Cpu,
+  Globe,
+  Lock
 } from 'lucide-react';
 
 const services = [
   {
     icon: <Code className="w-8 h-8" />,
     title: "Custom Web Development",
-    description: "Scalable web applications with modern tech stack",
+    description: "Scalable web applications with modern React, Node.js, and Next.js stack.",
     color: "from-blue-500 to-cyan-500"
   },
   {
     icon: <Palette className="w-8 h-8" />,
     title: "UI/UX Design",
-    description: "User-centered design for optimal experience",
+    description: "User-centered design systems and interfaces for optimal user experience.",
     color: "from-purple-500 to-pink-500"
   },
   {
     icon: <Smartphone className="w-8 h-8" />,
-    title: "Mobile Apps",
-    description: "Cross-platform mobile applications",
+    title: "Mobile Applications",
+    description: "Cross-platform mobile apps using React Native and Flutter.",
     color: "from-green-500 to-emerald-500"
   },
   {
     icon: <BarChart3 className="w-8 h-8" />,
     title: "E-commerce Solutions",
-    description: "Online stores with UPI & payment gateway",
+    description: "Full-featured online stores with UPI, Razorpay, and payment gateway integration.",
     color: "from-orange-500 to-red-500"
+  },
+  {
+    icon: <Server className="w-8 h-8" />,
+    title: "Backend Development",
+    description: "Robust APIs and server-side solutions with Node.js, Python, and Go.",
+    color: "from-indigo-500 to-blue-500"
+  },
+  {
+    icon: <Database className="w-8 h-8" />,
+    title: "Database Design",
+    description: "Efficient database architecture with PostgreSQL, MongoDB, and Redis.",
+    color: "from-yellow-500 to-amber-500"
   },
   {
     icon: <Zap className="w-8 h-8" />,
     title: "Performance Optimization",
-    description: "Fast loading & SEO optimized websites",
-    color: "from-yellow-500 to-amber-500"
+    description: "Fast loading, SEO optimized, and high-performance web solutions.",
+    color: "from-pink-500 to-rose-500"
   },
   {
     icon: <Shield className="w-8 h-8" />,
-    title: "Maintenance & Support",
-    description: "24/7 monitoring & regular updates",
-    color: "from-indigo-500 to-blue-500"
+    title: "Security & Maintenance",
+    description: "24/7 monitoring, regular updates, and security hardening.",
+    color: "from-teal-500 to-cyan-500"
   }
 ];
 
 const Services = () => {
+  const sectionRef = useRef(null);
+  const cardRefs = useRef([]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in');
+            // Add animation class when in view
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            entry.target.classList.remove('opacity-0', 'translate-y-8');
+          } else {
+            // Keep visible when out of view
+            // Don't remove classes when out of view
           }
         });
       },
-      { threshold: 0.1 }
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
     );
 
-    document.querySelectorAll('.service-card').forEach((el) => observer.observe(el));
+    // Observe each card
+    cardRefs.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
 
-    return () => observer.disconnect();
+    return () => {
+      cardRefs.current.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+    };
   }, []);
 
   return (
-    <section id="services" className="py-20 md:py-32 bg-gradient-to-b from-white to-blue-50">
+    <section id="services" className="py-20 md:py-32 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto max-w-7xl px-6">
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold mb-4">
-            Services
+          <span className="inline-block px-6 py-2 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 rounded-full text-sm font-semibold mb-6 border border-blue-100">
+            🔧 Our Services
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Full-Stack Digital Solutions
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Full-Stack <span className="gradient-text">Digital Solutions</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Comprehensive digital services tailored for Indian businesses
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Comprehensive digital services tailored for modern Indian businesses. 
+            From concept to deployment, we handle everything.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {services.map((service, index) => (
             <div 
               key={index}
-              className="service-card opacity-0 translate-y-4 service-card bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              ref={(el) => cardRefs.current[index] = el}
+              className="service-card opacity-0 translate-y-8 transition-all duration-700 ease-out bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-2xl hover:border-blue-300 hover:-translate-y-2"
+              style={{
+                transitionDelay: `${index * 100}ms`
+              }}
             >
-              <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${service.color} text-white mb-6`}>
+              <div className={`inline-flex p-4 rounded-xl bg-gradient-to-r ${service.color} text-white mb-6 shadow-lg`}>
                 {service.icon}
               </div>
               
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 {service.title}
               </h3>
               
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 mb-6 leading-relaxed">
                 {service.description}
               </p>
               
-              <ul className="space-y-2">
-                <li className="flex items-center text-sm text-gray-500">
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></span>
-                  Custom development
-                </li>
-                <li className="flex items-center text-sm text-gray-500">
-                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></span>
-                  Responsive design
-                </li>
-                <li className="flex items-center text-sm text-gray-500">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></span>
-                  Ongoing support
-                </li>
-              </ul>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Custom solutions</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Responsive design</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Ongoing support</span>
+                </div>
+              </div>
+              
+              <button className="mt-8 w-full py-3 text-sm font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors">
+                Learn More →
+              </button>
             </div>
           ))}
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-20 text-center">
+          <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-6 p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-3xl border border-blue-100">
+            <div className="text-left">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Need a custom solution?
+              </h3>
+              <p className="text-gray-600">
+                We specialize in building custom software for unique business needs.
+              </p>
+            </div>
+            <a 
+              href="#contact" 
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-blue-200 transition-all"
+            >
+              Get Free Consultation
+            </a>
+          </div>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .gradient-text {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
-        .animate-fade-in {
-          animation: fadeIn 0.6s ease-out forwards;
+        
+        /* Ensure service cards stay visible after animation */
+        .service-card {
+          will-change: transform, opacity;
         }
-        .service-card:nth-child(1) { animation-delay: 0.1s; }
-        .service-card:nth-child(2) { animation-delay: 0.2s; }
-        .service-card:nth-child(3) { animation-delay: 0.3s; }
-        .service-card:nth-child(4) { animation-delay: 0.4s; }
-        .service-card:nth-child(5) { animation-delay: 0.5s; }
-        .service-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        .service-card:hover {
+          transform: translateY(-8px) !important;
+        }
       `}</style>
     </section>
   );
